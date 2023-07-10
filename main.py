@@ -65,6 +65,7 @@ def book_borrow():
             if row[0][3] == 'f':
                 print(f"{search_info}..책을 대출합니다.")
                 cur.execute(f"UPDATE books SET borrowed = 'true' WHERE id = {int(row[0][1])}")
+                conn.commit()
             else:
                 print("대출 불가능")
     else:
@@ -72,8 +73,8 @@ def book_borrow():
 
 
 def book_return():
-    print('책 대출')
-    num = input('대출 하려는 책 id로 찾기 : 1 입력\n대출 하려는 책 이름으로 찾기 : 2 입력 \n입력 : ')
+    print('책 반납')
+    num = input('반납 하려는 책 id로 찾기 : 1 입력\n반납 하려는 책 이름으로 찾기 : 2 입력 \n입력 : ')
     search_info = input('검색 하려는 값 입력 : ')
 
     if num == '1':
@@ -84,11 +85,12 @@ def book_return():
     rows = cur.fetchall()
     if rows:
         for row in rows:
-            if row[0][3] == 'f':
-                print(f"{search_info}..책을 대출합니다.")
-                cur.execute(f"UPDATE books SET borrowed = 'true' WHERE id = {int(row[0][1])}")
+            if row[0][3] == 't':
+                print(f"{search_info}..책을 반납합니다.")
+                cur.execute(f"UPDATE books SET borrowed = 'false' WHERE id = {int(row[0][1])}")
+                conn.commit()
             else:
-                print("대출 불가능")
+                print("반납 불가능")
     else:
         print("검색 결과 없음.")
 
