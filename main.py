@@ -38,7 +38,7 @@ def book_search():
     rows = cur.fetchall()
     rows2 = cur2.fetchall()
     if rows:
-        for row, row2 in rows, rows2:
+        for row, row2 in zip(rows, rows2):
             print(row[0])
             if not row2:
                 print("대출 가능")
@@ -46,14 +46,51 @@ def book_search():
                 print("대출 불가능")
     else:
         print("검색 결과 없음.")
-
+    cur2.close()
+# row 로 오는 튜플 분리,...
 
 def book_borrow():
-    pass
+    print('책 대출')
+    num = input('대출 하려는 책 id로 찾기 : 1 입력\n대출 하려는 책 이름으로 찾기 : 2 입력 \n입력 : ')
+    search_info = input('검색 하려는 값 입력 : ')
+
+    if num == '1':
+        cur.execute(f"SELECT (id, borrowed) FROM books WHERE id = {search_info}")
+    else:
+        cur.execute(f"SELECT (id, borrowed) FROM books WHERE title LIKE '%{search_info}%'")
+
+    rows = cur.fetchall()
+    if rows:
+        for row in rows:
+            if row[0][3] == 'f':
+                print(f"{search_info}..책을 대출합니다.")
+                cur.execute(f"UPDATE books SET borrowed = 'true' WHERE id = {int(row[0][1])}")
+            else:
+                print("대출 불가능")
+    else:
+        print("검색 결과 없음.")
 
 
 def book_return():
-    pass
+    print('책 대출')
+    num = input('대출 하려는 책 id로 찾기 : 1 입력\n대출 하려는 책 이름으로 찾기 : 2 입력 \n입력 : ')
+    search_info = input('검색 하려는 값 입력 : ')
+
+    if num == '1':
+        cur.execute(f"SELECT (id, borrowed) FROM books WHERE id = {search_info}")
+    else:
+        cur.execute(f"SELECT (id, borrowed) FROM books WHERE title LIKE '%{search_info}%'")
+
+    rows = cur.fetchall()
+    if rows:
+        for row in rows:
+            if row[0][3] == 'f':
+                print(f"{search_info}..책을 대출합니다.")
+                cur.execute(f"UPDATE books SET borrowed = 'true' WHERE id = {int(row[0][1])}")
+            else:
+                print("대출 불가능")
+    else:
+        print("검색 결과 없음.")
 
 
 def book_borrowed_info():
