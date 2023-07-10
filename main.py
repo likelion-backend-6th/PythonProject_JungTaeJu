@@ -43,4 +43,32 @@ def library_system():
             book_borrowed_info()
 
 
-library_system()
+# library_system()
+
+conn = psycopg2.connect(
+    host='localhost',
+    dbname='library',
+    user='postgres',
+    password='1234'
+)
+
+cur = conn.cursor()
+# cur.execute('''
+#     CREATE TABLE books (
+#         id SERIAL PRIMARY KEY ,
+#         title VARCHAR(50),
+#         author VARCHAR(50),
+#         publisher VARCHAR(50),
+#         borrowed BOOLEAN,
+#         borrowed_date DATE)
+# ''')
+# conn.commit()
+
+cur.execute("SELECT * FROM books")
+rows = cur.fetchall()
+
+for row in rows:
+    print(row)
+
+cur.close()
+conn.close()
