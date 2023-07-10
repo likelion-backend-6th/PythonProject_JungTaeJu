@@ -96,7 +96,12 @@ def book_return():
 
 
 def book_borrowed_info():
-    pass
+    print("현재 대출중인 책 목록")
+    cur.execute(f"SELECT * FROM books WHERE borrowed = 'true'")
+    rows = cur.fetchall()
+
+    for row in rows:
+        print(row)
 
 
 def book_list():
