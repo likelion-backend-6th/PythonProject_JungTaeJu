@@ -1,13 +1,28 @@
 import psycopg2
 from psycopg2 import sql
 
+conn = psycopg2.connect(
+    host='localhost',
+    dbname='library',
+    user='postgres',
+    password='1234'
+)
+
+cur = conn.cursor()
 
 def book_search():
     pass
 
 
 def book_add():
-    pass
+    print('책 추가 하기')
+    title = input('책 제목 입력 : ')
+    author = input('저자 입력 : ')
+    pub = input('출판사 입력 : ')
+
+    cur.execute(f"INSERT INTO books (title, author, publisher) VALUES ('{title}', '{author}', '{pub}')")
+    conn.commit()
+
 
 
 def book_borrow():
@@ -25,7 +40,7 @@ def book_borrowed_info():
 def library_system():
     while True:
         print('도서 관리 시스템 입니다.')
-        print('1. 데이터 입력')
+        print('1. 도서 데이터 추가')
         print('2. 도서 정보 조회')
         print('3. 도서 대출')
         print('4. 도서 반납')
@@ -41,18 +56,13 @@ def library_system():
             book_return()
         elif order == '5':
             book_borrowed_info()
+        else:
+            break
 
 
-# library_system()
+library_system()
 
-conn = psycopg2.connect(
-    host='localhost',
-    dbname='library',
-    user='postgres',
-    password='1234'
-)
 
-cur = conn.cursor()
 # cur.execute('''
 #     CREATE TABLE books (
 #         id SERIAL PRIMARY KEY ,
