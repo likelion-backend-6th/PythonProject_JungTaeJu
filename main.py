@@ -10,9 +10,6 @@ conn = psycopg2.connect(
 
 cur = conn.cursor()
 
-def book_search():
-    pass
-
 
 def book_add():
     print('책 추가 하기')
@@ -20,9 +17,23 @@ def book_add():
     author = input('저자 입력 : ')
     pub = input('출판사 입력 : ')
 
-    cur.execute(f"INSERT INTO books (title, author, publisher, borrowed) VALUES ('{title}', '{author}', '{pub}', 'false')")
+    cur.execute(
+        f"INSERT INTO books (title, author, publisher, borrowed) VALUES ('{title}', '{author}', '{pub}', 'false')")
     conn.commit()
 
+
+def book_search():
+    print('책 찾기')
+    num = input('id로 찾기 : 1 입력\n이름으로 찾기 : 2 입력 \n입력 : ')
+    search_info = input('검색 하려는 값 입력 : ')
+    if num == '1':
+        cur.execute(f"SELECT (id, title, author, publisher) FROM books WHERE id = {search_info}")
+    else:
+        cur.execute(f"SELECT (id, title, author, publisher) FROM books WHERE title LIKE '%{search_info}%'")
+    rows = cur.fetchall()
+
+    for row in rows:
+        print(row)
 
 
 def book_borrow():
@@ -45,7 +56,8 @@ def library_system():
         print('3. 도서 대출')
         print('4. 도서 반납')
         print('5. 도서 대출 정보')
-        order = input('목록에 없는 입력시 프로그램이 종료 됩니다.\n메뉴 번호를 입력하여 실행 하십시오 : ')
+
+        order = input('목록에 없는 입력시 프로그램이 종료 됩니다.\n 메뉴 번호를 입력하여 실행 하십시오 : ')
         if order == '1':
             book_add()
         elif order == '2':
@@ -62,7 +74,6 @@ def library_system():
 
 library_system()
 
-
 # cur.execute('''
 #     CREATE TABLE books (
 #         id SERIAL PRIMARY KEY ,
@@ -73,9 +84,11 @@ library_system()
 #         borrowed_date DATE)
 # ''')
 # conn.commit()
-cur.execute("UPDATE books SET borrowed = 'false' WHERE id = 1")
-conn.commit()
-# 1번 항목 borrowed false로 update
+
+# # 1번 항목 borrowed false로 update
+# cur.execute("UPDATE books SET borrowed = 'false' WHERE id = 1")
+# conn.commit()
+
 
 cur.execute("SELECT * FROM books")
 rows = cur.fetchall()
