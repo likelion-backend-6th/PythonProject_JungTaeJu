@@ -20,7 +20,7 @@ def book_add():
     author = input('저자 입력 : ')
     pub = input('출판사 입력 : ')
 
-    cur.execute(f"INSERT INTO books (title, author, publisher) VALUES ('{title}', '{author}', '{pub}')")
+    cur.execute(f"INSERT INTO books (title, author, publisher, borrowed) VALUES ('{title}', '{author}', '{pub}', 'false')")
     conn.commit()
 
 
@@ -73,6 +73,9 @@ library_system()
 #         borrowed_date DATE)
 # ''')
 # conn.commit()
+cur.execute("UPDATE books SET borrowed = 'false' WHERE id = 1")
+conn.commit()
+# 1번 항목 borrowed false로 update
 
 cur.execute("SELECT * FROM books")
 rows = cur.fetchall()
